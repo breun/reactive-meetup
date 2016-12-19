@@ -12,7 +12,7 @@ public class Exercise03 {
 		
 		// ASSIGNMENT: Create a new stream based on the number$ stream that only emits even numbers.
 		
-		Observable<Integer> evenNumber$ = unknown(); // ???
+		Observable<Integer> evenNumber$ = number$.filter(x -> x % 2 == 0);
 		
 		// If implemented correctly, the application will output the following numbers: 4, 6, 2, 2, 4, 8
 		
