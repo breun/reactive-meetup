@@ -14,7 +14,7 @@ public class Exercise06 {
 		// that also contains the intermediate sums, for example given a stream of numbers 1, 2, 3, then the resulting stream
 		// should emit the numbers 3 (1 + 2) and 6 (3 + 3).
 		
-		Observable<Integer> sum$ = unknown(); // ???
+		Observable<Integer> sum$ = number$.scan((sum, nextNumber) -> sum + nextNumber);
 		
 		// When implemented correctly you should see the following numbers: 1, 10, 14, 21, 27
 		
