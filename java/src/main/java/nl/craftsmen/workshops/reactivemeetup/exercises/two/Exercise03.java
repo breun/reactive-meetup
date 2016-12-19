@@ -33,8 +33,18 @@ public class Exercise03 {
 		// HINT: Solve this assignment using divide and conquer. First try to define two streams, one that tells whenever the
 		// gate is occupied and another that tells when the gate is free. Next find a way to combine those streams to get the
 		// desired output.
-		
-		Observable<Boolean> gateIsFree$ = unknown(); // ???
+
+
+		Observable<Boolean> occupied$ = gateCheckEvent$
+			.map(event -> false);
+
+		Observable<Boolean> free$ = gateCheckEvent$
+			.debounce(GATE_OCCUPY_TIME, TimeUnit.MILLISECONDS)
+			.map(event -> true);
+
+		Observable<Boolean> gateIsFree$ = Observable.merge(occupied$, free$)
+			.distinctUntilChanged()
+			.startWith(true);
 		
 		// When implemented correctly you should see the following output:
 		// free, occupied, free, occupied, free, occupied, free, occupied, free
