@@ -12,7 +12,7 @@ public class Exercise05 {
 		
 		// ASSIGNMENT: create a new stream that emits the square of each number emitted by the number$ stream.
 		
-		Observable<Integer> squaredNumber$ = unknown(); // ???
+		Observable<Integer> squaredNumber$ = number$.map(x -> x * x);
 		
 		// If implemented correctly, the application will output the following numbers: 1, 81, 16, 49, 36, 4, 4, 49, 9, 16, 64
 		
