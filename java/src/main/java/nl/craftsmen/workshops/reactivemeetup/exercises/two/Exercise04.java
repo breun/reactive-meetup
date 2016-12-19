@@ -34,7 +34,17 @@ public class Exercise04 {
 		//  - a.isCheckIn() && b.isCheckIn()   ->  NO_CHECKOUT_COST
 		//  - otherwise                        ->  Nothing. You can represent this using one of the following: Optional.empty(), null or 0.0
 		
-		Observable<Double> travelCost$ = unknown(); // ???
+		Observable<Double> travelCost$ = gateCheckEvent$
+			.zipWith(gateCheckEvent$.skip(1), (firstEvent, secondEvent) -> {
+				if (firstEvent.isCheckIn() && secondEvent.isCheckOut()) {
+					return costMatrix.getTravelCost(firstEvent.getRailwayStation(), secondEvent.getRailwayStation());
+				} else if (firstEvent.isCheckIn() && secondEvent.isCheckIn()) {
+					return NO_CHECKOUT_COST;
+				}
+				return 0.0;
+			})
+			.filter(cost -> cost > 0)
+			.scan((total, cost) -> total + cost);
 		
 		// When implemented correctly you should see the following output:
 		// 7.5, 19.0, 39.0, 46.5
