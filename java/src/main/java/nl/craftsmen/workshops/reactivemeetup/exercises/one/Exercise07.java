@@ -14,7 +14,7 @@ public class Exercise07 {
 		// ASSIGNMENT: Concatenate all the words from the word$ stream to form a sentence. Emit the final and intermediate
 		// results (the partial sentences) in the sentence$ stream.
 		
-		Observable<String> sentence$ = unknown(); // ???
+		Observable<String> sentence$ = word$.scan((sentence, word) -> sentence + " " + word);
 		
 		// If implemented correctly you should now know what "jirble" means.
 		
@@ -25,7 +25,9 @@ public class Exercise07 {
 		// operator (+).
 		//
 		// HINT: you will need a different version (overloaded method) of the same operator you used above.
-		
+
+		//Observable<StringBuilder> sentence$ = word$.scan(new StringBuilder(), (sb, word) -> sb.append(" ").append(word));
+
 		sentence$.subscribe(System.out::println);
 
 		waitForStreamToComplete(sentence$);
