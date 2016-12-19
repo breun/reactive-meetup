@@ -2,6 +2,7 @@ package nl.craftsmen.workshops.reactivemeetup.exercises.two;
 
 import static nl.craftsmen.workshops.reactivemeetup.util.Utils.*;
 
+import nl.craftsmen.workshops.reactivemeetup.domain.railway.LatLong;
 import nl.craftsmen.workshops.reactivemeetup.domain.railway.TrainMetrics;
 import nl.craftsmen.workshops.reactivemeetup.util.RailwayStreams;
 
@@ -41,7 +42,15 @@ public class Exercise05 {
 		//
 		// HINT: To convert a velocity in meters per second (m/s) to kilometers per hour (Km/h) multiple the velocity with 3.6
 		
-		Observable<Double> velocity$ = unknown(); // ???
+		Observable<Double> velocity$ = trainMetrics$
+			.buffer(10, 5)
+			.filter(metrics -> !metrics.isEmpty())
+			.map(metrics -> {
+				TrainMetrics firstMeasurement = metrics.get(0);
+				TrainMetrics lastMeasurement = metrics.get(metrics.size() - 1);
+				return averageVelocityInKmPerHour(firstMeasurement, lastMeasurement);
+			})
+			.reduce(Math::max);
 		
 		// When implemented correctly you should find a maximum velocity of ~ 140 Km/h.
 		
@@ -49,5 +58,11 @@ public class Exercise05 {
 		
 		waitForStreamToComplete(velocity$);
 	}
-	
+
+	private static double averageVelocityInKmPerHour(TrainMetrics measurement1, TrainMetrics measurement2) {
+		double distanceInMeters = measurement1.getPosition().distanceTo(measurement2.getPosition());
+		long durationInMilliseconds = Math.abs(measurement1.getTimestamp() - measurement2.getTimestamp());
+		double velocityInMetersPerSecond = distanceInMeters / durationInMilliseconds * 1000;
+		return velocityInMetersPerSecond * 3.6;
+	}
 }
